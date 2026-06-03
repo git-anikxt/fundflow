@@ -1,18 +1,27 @@
-
+import dns from "node:dns";
 import mongoose from "mongoose";
 
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
+
 const connectDb = async () => {
-        try {
-            const conn = await mongoose.connect(process.env.MONGO_URI, {
-                useNewUrlParser: true,
-            });
-            console.log(`MongoDB Connected: ${conn.connection.host}`);
-            return conn;
-            
-        } catch (error) {
-            console.error(error.message);
-            process.exit(1);
-        }
+  try {
+    const uri = process.env.MONGO_URI;
+
+    if (!uri) {
+      throw new Error("MONGO_URI is missing in .env.local");
     }
 
-  export default connectDb;
+    if (mongoose.connection.readyState >= 1) {
+      return mongoose.connection;
+    }
+
+    const conn = await mongoose.connect(uri);
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+    return conn;
+  } catch (error) {
+    console.error("MongoDB connection error:", error.message);
+    throw error;
+  }
+};
+
+export default connectDb;
