@@ -1,96 +1,63 @@
-import React from 'react';
+import Link from "next/link";
+import { ArrowRight, Heart, Users, Zap, Shield } from "lucide-react";
 
-const About = () => {
-    return (
-        <div className="container mx-auto px-8 md:px-4 py-8">
-            <h1 className="text-3xl font-semibold mb-4">About Get Me a Chai</h1>
-            <p className="text-lg mb-6">
-                Get Me a Chai is a crowdfunding platform designed for creators to fund their projects with the support of their fans. It&apos;s a space where your fans can directly contribute to your creative endeavors by buying you a chai. Unlock the potential of your fanbase and bring your projects to life.
+export default function About() {
+  return (
+    <>
+      <section className="hero-mesh dot-grid section-padding">
+        <div className="container-custom">
+          <div className="max-w-3xl">
+            <div className="badge mb-6">About CreatorHub</div>
+            <h1 className="text-5xl font-extrabold tracking-tight leading-tight">
+              Built for creators,
+              <span className="gradient-text block">by creators.</span>
+            </h1>
+            <p style={{color:'var(--color-text-muted)',fontSize:'1.15rem',lineHeight:'1.8'}} className="mt-6 max-w-2xl">
+              CreatorHub is a direct funding platform that connects independent creators — developers, designers, writers, and makers — with the community that believes in their work.
             </p>
-
-            <h2 className="text-2xl font-semibold mb-4">How It Works</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                <div className="flex items-center mb-6">
-                    <img className="w-20 h-20 rounded-full mr-4" src="/group.gif" alt="Fans Want to Collaborate" />
-                    <div>
-                        <h3 className="text-xl font-semibold mb-2">Fans Want to Collaborate</h3>
-                        <p>Your fans are enthusiastic about collaborating with you on your projects.</p>
-                    </div>
-                </div>
-                <div className="flex items-center mb-6">
-                    <img className="w-20 h-20 rounded-full mr-4" src="/coin.gif" alt="Support Through Chai" />
-                    <div>
-                        <h3 className="text-xl font-semibold mb-2">Support Through Chai</h3>
-                        <p>Receive support from your fans in the form of chai purchases, directly contributing to your project funding.</p>
-                    </div>
-                </div>
-                {/* Add more steps as needed */}
-            </div>
-
-            <h2 className="text-2xl font-semibold mb-4">Benefits for Creators</h2>
-            <ul className="list-disc pl-6 mb-6">
-                <li className="mb-2">Direct financial support from your fanbase</li>
-                <li className="mb-2">Engage with your fans on a more personal level</li>
-                <li className="mb-2">Access to a platform tailored for creative projects</li>
-                {/* Add more benefits */}
-            </ul>
-
-            <h2 className="text-2xl font-semibold mb-4">Benefits for Fans</h2>
-            <ul className="list-disc pl-6 mb-6">
-                <li className="mb-2">Directly contribute to the success of your favorite creators</li>
-                <li className="mb-2">Exclusive rewards and perks for supporting creators</li>
-                <li className="mb-2">Be part of the creative process and connect with creators</li>
-                {/* Add more benefits */}
-            </ul>
-
-            {/* Additional sections */}
-            <h2 className="text-2xl font-semibold mb-4">Benefits of Collaboration</h2>
-            <ul className="list-disc pl-6 mb-6">
-                <li className="mb-2">Unlock new opportunities through collaboration with fellow creators</li>
-                <li className="mb-2">Expand your network and reach a wider audience</li>
-                <li className="mb-2">Combine skills and resources to create innovative projects</li>
-                {/* Add more benefits */}
-            </ul>
-
-            <h2 className="text-2xl font-semibold mb-4">Community Engagement</h2>
-            <ul className="list-disc pl-6 mb-6">
-                <li className="mb-2">Interact with a supportive community of like-minded individuals</li>
-                <li className="mb-2">Receive valuable feedback and encouragement from peers</li>
-                <li className="mb-2">Participate in discussions and events centered around your interests</li>
-                {/* Add more benefits */}
-            </ul>
-
-            <h2 className="text-2xl font-semibold mb-4">Access to Resources</h2>
-            <ul className="list-disc pl-6 mb-6">
-                <li className="mb-2">Gain access to resources such as tutorials, templates, and tools</li>
-                <li className="mb-2">Receive guidance and mentorship from experienced creators</li>
-                <li className="mb-2">Stay updated on industry trends and best practices</li>
-                {/* Add more benefits */}
-            </ul>
-
-            <h2 className="text-2xl font-semibold mb-4">Recognition and Exposure</h2>
-            <ul className="list-disc pl-6 mb-6">
-                <li className="mb-2">Showcase your work to a global audience and gain recognition</li>
-                <li className="mb-2">Feature in promotional materials and campaigns</li>
-                <li className="mb-2">Build your portfolio and increase your credibility as a creator</li>
-                {/* Add more benefits */}
-            </ul>
-
-            <h2 className="text-2xl font-semibold mb-4">Supportive Community</h2>
-            <ul className="list-disc pl-6 mb-6">
-                <li className="mb-2">Join a community that values creativity, diversity, and inclusivity</li>
-                <li className="mb-2">Find encouragement and inspiration from fellow members</li>
-                <li className="mb-2">Collaborate on projects and share resources for mutual growth</li>
-                {/* Add more benefits */}
-            </ul>
-
+          </div>
         </div>
-    );
+      </section>
+
+      <section className="section-padding">
+        <div className="container-custom">
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div>
+              <h2 className="text-3xl font-bold mb-5">Our Mission</h2>
+              <p style={{color:'var(--color-text-muted)',lineHeight:'1.9'}} className="mb-4">
+                We believe creators deserve direct access to the people who love their work. No middlemen, no opaque algorithms — just real community support flowing directly to the people building things that matter.
+              </p>
+              <p style={{color:'var(--color-text-muted)',lineHeight:'1.9'}}>
+                Whether you&apos;re an open-source developer, an indie game maker, or a content creator — CreatorHub gives you the tools to build a sustainable creative income.
+              </p>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { icon: <Heart size={20} />, title: "Community First", desc: "Direct connections between creators and supporters." },
+                { icon: <Zap size={20} />, title: "Instant Payouts", desc: "Funds go directly to your Razorpay account." },
+                { icon: <Shield size={20} />, title: "Secure", desc: "Bank-grade security on every transaction." },
+                { icon: <Users size={20} />, title: "Growing Fast", desc: "500+ creators and 10,000+ supporters." },
+              ].map((v) => (
+                <div key={v.title} className="glass-card p-5">
+                  <div className="avatar w-9 h-9 text-sm mb-3">{v.icon}</div>
+                  <div className="font-semibold text-white text-sm mb-1">{v.title}</div>
+                  <div style={{color:'var(--color-text-muted)',fontSize:'0.82rem'}}>{v.desc}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style={{background:'var(--color-surface)',borderTop:'1px solid var(--color-border)',borderBottom:'1px solid var(--color-border)'}} className="py-20">
+        <div className="container-custom text-center">
+          <h2 className="text-3xl font-bold mb-4">Ready to start?</h2>
+          <p style={{color:'var(--color-text-muted)'}} className="mb-8">Join hundreds of creators already getting funded.</p>
+          <Link href="/login" className="btn-primary" style={{padding:'0.8rem 2rem',fontSize:'1rem'}}>
+            Get Started <ArrowRight size={16} />
+          </Link>
+        </div>
+      </section>
+    </>
+  );
 }
-
-export default About;
-
-export const metadata = {
-    title: "About - Get Me A Chai",
-  }
-   

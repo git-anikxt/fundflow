@@ -1,144 +1,198 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { useSession, signOut } from "next-auth/react"
 import Link from "next/link"
+import { Menu, X, LayoutDashboard, User, LogOut, ChevronDown } from "lucide-react"
 
 const Navbar = () => {
   const { data: session } = useSession()
   const [showDropdown, setShowDropdown] = useState(false)
   const [mobileMenu, setMobileMenu] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10)
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/90 backdrop-blur-lg border-b border-slate-200">
-      <div className="max-w-7xl mx-auto px-6">
+    <nav
+      className="sticky top-0 z-50"
+      style={{
+        background: scrolled ? 'rgba(10,10,15,0.92)' : 'rgba(10,10,15,0.7)',
+        backdropFilter: 'blur(20px)',
+        borderBottom: '1px solid var(--color-border)',
+        transition: 'background 0.3s ease',
+      }}
+    >
+      <div className="container-custom">
         <div className="h-16 flex items-center justify-between">
 
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold text-lg">
+          <Link href="/" style={{display:'flex',alignItems:'center',gap:'0.75rem',textDecoration:'none'}}>
+            <div
+              className="avatar w-9 h-9 text-sm"
+              style={{background:'linear-gradient(135deg,#6366f1,#a78bfa)',fontWeight:800,letterSpacing:'-0.02em'}}
+            >
               C
             </div>
-
-            <div>
-              <h1 className="font-bold text-slate-900 text-lg">
-                CreatorHub
-              </h1>
-            </div>
+            <span style={{fontWeight:700,fontSize:'1rem',color:'var(--color-text)',letterSpacing:'-0.02em'}}>CreatorHub</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8 text-slate-700 font-medium">
-            <Link href="/" className="hover:text-blue-600 transition">
-              Home
-            </Link>
-
-            <Link href="/about" className="hover:text-blue-600 transition">
-              About
-            </Link>
-
-            <Link href="/dashboard" className="hover:text-blue-600 transition">
-              Dashboard
-            </Link>
+          {/* Desktop nav */}
+          <div className="hidden md:flex items-center gap-1">
+            {[['/', 'Home'], ['/about', 'About'], ['/dashboard', 'Dashboard']].map(([href, label]) => (
+              <Link
+                key={href}
+                href={href}
+                style={{
+                  padding:'0.45rem 0.875rem',
+                  borderRadius:'var(--radius-sm)',
+                  color:'var(--color-text-muted)',
+                  fontWeight:500,
+                  fontSize:'0.9rem',
+                  textDecoration:'none',
+                  transition:'color 0.18s, background 0.18s',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.color='var(--color-text)'; e.currentTarget.style.background='rgba(255,255,255,0.05)'; }}
+                onMouseLeave={e => { e.currentTarget.style.color='var(--color-text-muted)'; e.currentTarget.style.background='transparent'; }}
+              >
+                {label}
+              </Link>
+            ))}
           </div>
 
-          {/* Right Side */}
-          <div className="flex items-center gap-3">
-
+          {/* Right */}
+          <div className="flex items-center gap-2">
             {!session && (
-              <Link href="/login">
-                <button className="rounded-xl bg-blue-600 px-5 py-2 text-white font-medium hover:bg-blue-700 transition">
-                  Login
-                </button>
+              <Link href="/login" className="btn-primary" style={{padding:'0.5rem 1.25rem',fontSize:'0.875rem'}}>
+                Sign In
               </Link>
             )}
 
             {session && (
-              <div className="relative">
-
+              <div style={{position:'relative'}}>
                 <button
                   onClick={() => setShowDropdown(!showDropdown)}
-                  className="flex items-center gap-3 bg-slate-100 hover:bg-slate-200 px-4 py-2 rounded-xl transition"
+                  style={{
+                    display:'flex',
+                    alignItems:'center',
+                    gap:'0.6rem',
+                    padding:'0.4rem 0.75rem',
+                    background: showDropdown ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.04)',
+                    border:'1px solid var(--color-border)',
+                    borderRadius:'var(--radius-md)',
+                    cursor:'pointer',
+                    transition:'background 0.18s',
+                  }}
                 >
-                  <div className="h-8 w-8 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold">
-                    {session?.user?.name?.charAt(0)?.toUpperCase() || "U"}
+                  <div className="avatar w-7 h-7" style={{fontSize:'0.75rem',fontWeight:700}}>
+                    {session?.user?.name?.charAt(0)?.toUpperCase() || 'U'}
                   </div>
-
-                  <span className="hidden md:block text-slate-800 font-medium">
+                  <span className="hidden md:block" style={{color:'var(--color-text)',fontWeight:500,fontSize:'0.875rem'}}>
                     {session?.user?.name}
                   </span>
-
-                  <span className="text-slate-500">▼</span>
+                  <ChevronDown size={14} style={{color:'var(--color-text-muted)',transform: showDropdown ? 'rotate(180deg)' : 'none',transition:'transform 0.2s'}} />
                 </button>
 
                 {showDropdown && (
                   <div
-                    className="absolute right-0 mt-3 w-56 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden"
+                    style={{
+                      position:'absolute',
+                      right:0,
+                      top:'calc(100% + 0.5rem)',
+                      width:'200px',
+                      background:'var(--color-surface-2)',
+                      border:'1px solid var(--color-border)',
+                      borderRadius:'var(--radius-lg)',
+                      boxShadow:'var(--shadow-lg)',
+                      overflow:'hidden',
+                    }}
                     onMouseLeave={() => setShowDropdown(false)}
                   >
                     <Link
                       href="/dashboard"
-                      className="block px-5 py-3 hover:bg-slate-50 text-slate-700"
+                      onClick={() => setShowDropdown(false)}
+                      style={{display:'flex',alignItems:'center',gap:'0.7rem',padding:'0.75rem 1rem',color:'var(--color-text-muted)',fontSize:'0.875rem',textDecoration:'none',transition:'background 0.15s'}}
+                      onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.05)'}
+                      onMouseLeave={e => e.currentTarget.style.background='transparent'}
                     >
-                      Dashboard
+                      <LayoutDashboard size={15} /> Dashboard
                     </Link>
-
                     <Link
                       href={`/${session.user.name}`}
-                      className="block px-5 py-3 hover:bg-slate-50 text-slate-700"
+                      onClick={() => setShowDropdown(false)}
+                      style={{display:'flex',alignItems:'center',gap:'0.7rem',padding:'0.75rem 1rem',color:'var(--color-text-muted)',fontSize:'0.875rem',textDecoration:'none',transition:'background 0.15s'}}
+                      onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.05)'}
+                      onMouseLeave={e => e.currentTarget.style.background='transparent'}
                     >
-                      My Creator Page
+                      <User size={15} /> My Creator Page
                     </Link>
-
+                    <div style={{height:'1px',background:'var(--color-border)',margin:'0.25rem 0'}}></div>
                     <button
                       onClick={() => signOut()}
-                      className="w-full text-left px-5 py-3 hover:bg-red-50 text-red-600"
+                      style={{display:'flex',alignItems:'center',gap:'0.7rem',padding:'0.75rem 1rem',color:'#f87171',fontSize:'0.875rem',background:'transparent',border:'none',cursor:'pointer',width:'100%',transition:'background 0.15s'}}
+                      onMouseEnter={e => e.currentTarget.style.background='rgba(248,113,113,0.06)'}
+                      onMouseLeave={e => e.currentTarget.style.background='transparent'}
                     >
-                      Logout
+                      <LogOut size={15} /> Sign Out
                     </button>
                   </div>
                 )}
               </div>
             )}
 
-            {/* Mobile Menu Button */}
+            {/* Mobile toggle */}
             <button
-              className="md:hidden text-slate-800"
+              className="md:hidden"
               onClick={() => setMobileMenu(!mobileMenu)}
+              style={{padding:'0.5rem',color:'var(--color-text-muted)',background:'transparent',border:'none',cursor:'pointer'}}
+              aria-label="Toggle menu"
             >
-              ☰
+              {mobileMenu ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
+        {/* Mobile menu */}
         {mobileMenu && (
-          <div className="md:hidden border-t border-slate-200 py-4 flex flex-col gap-4 text-slate-700">
-
-            <Link href="/">Home</Link>
-
-            <Link href="/about">About</Link>
-
+          <div
+            style={{
+              borderTop:'1px solid var(--color-border)',
+              padding:'1rem 0 1.25rem',
+              display:'flex',
+              flexDirection:'column',
+              gap:'0.25rem',
+            }}
+          >
+            {[['/', 'Home'], ['/about', 'About'], ['/dashboard', 'Dashboard']].map(([href, label]) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMobileMenu(false)}
+                style={{padding:'0.6rem 0.5rem',color:'var(--color-text-muted)',fontWeight:500,textDecoration:'none',borderRadius:'var(--radius-sm)'}}
+              >
+                {label}
+              </Link>
+            ))}
             {session && (
               <>
-                <Link href="/dashboard">Dashboard</Link>
-
-                <Link href={`/${session.user.name}`}>
+                <Link href={`/${session.user.name}`} onClick={() => setMobileMenu(false)}
+                  style={{padding:'0.6rem 0.5rem',color:'var(--color-text-muted)',fontWeight:500,textDecoration:'none'}}>
                   My Creator Page
                 </Link>
-
-                <button
-                  onClick={() => signOut()}
-                  className="text-left text-red-600"
-                >
-                  Logout
+                <button onClick={() => signOut()}
+                  style={{padding:'0.6rem 0.5rem',color:'#f87171',fontWeight:500,textAlign:'left',background:'transparent',border:'none',cursor:'pointer'}}>
+                  Sign Out
                 </button>
               </>
             )}
-
             {!session && (
-              <Link href="/login">
-                Login
+              <Link href="/login" onClick={() => setMobileMenu(false)}
+                style={{padding:'0.6rem 0.5rem',color:'var(--color-primary)',fontWeight:500,textDecoration:'none'}}>
+                Sign In
               </Link>
             )}
           </div>

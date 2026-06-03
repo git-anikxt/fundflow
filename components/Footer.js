@@ -2,66 +2,55 @@ import Link from "next/link";
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-
   return (
-    <footer className="bg-slate-50 border-t border-slate-200 mt-20">
-      <div className="max-w-7xl mx-auto px-6 py-12">
-
+    <footer style={{background:'var(--color-surface)',borderTop:'1px solid var(--color-border)',marginTop:'0'}}>
+      <div className="container-custom py-14">
         <div className="grid md:grid-cols-4 gap-10">
-
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">
-              CreatorHub
-            </h2>
-
-            <p className="text-slate-600 mt-3">
-              Support creators directly and help bring
-              meaningful projects to life.
+            <div style={{display:'flex',alignItems:'center',gap:'0.6rem',marginBottom:'0.75rem'}}>
+              <div className="avatar w-8 h-8" style={{fontSize:'0.75rem',fontWeight:800,background:'linear-gradient(135deg,#6366f1,#a78bfa)'}}>C</div>
+              <span style={{fontWeight:700,fontSize:'1rem',color:'var(--color-text)'}}>CreatorHub</span>
+            </div>
+            <p style={{color:'var(--color-text-muted)',fontSize:'0.875rem',lineHeight:'1.7',maxWidth:'220px'}}>
+              Support creators directly and help bring meaningful projects to life.
             </p>
           </div>
 
-          <div>
-            <h3 className="font-semibold text-slate-900 mb-3">
-              Product
-            </h3>
-
-            <div className="flex flex-col gap-2 text-slate-600">
-              <Link href="/">Home</Link>
-              <Link href="/about">About</Link>
-              <Link href="/explore">Explore</Link>
+          {[{
+            heading: 'Product',
+            links: [{ label:'Home', href:'/' }, { label:'About', href:'/about' }, { label:'Explore', href:'/explore' }]
+          }, {
+            heading: 'Resources',
+            links: [{ label:'FAQ', href:'#' }, { label:'Privacy', href:'#' }, { label:'Terms', href:'#' }]
+          }, {
+            heading: 'Social',
+            links: [{ label:'GitHub', href:'#' }, { label:'LinkedIn', href:'#' }, { label:'Twitter', href:'#' }]
+          }].map((col) => (
+            <div key={col.heading}>
+              <h3 style={{fontWeight:600,fontSize:'0.875rem',color:'var(--color-text)',marginBottom:'0.875rem',textTransform:'uppercase',letterSpacing:'0.06em'}}>
+                {col.heading}
+              </h3>
+              <div style={{display:'flex',flexDirection:'column',gap:'0.6rem'}}>
+                {col.links.map(l => (
+                  <Link
+                    key={l.label}
+                    href={l.href}
+                    style={{color:'var(--color-text-muted)',fontSize:'0.875rem',textDecoration:'none',transition:'color 0.18s'}}
+                    onMouseEnter={e => e.currentTarget.style.color='var(--color-text)'}
+                    onMouseLeave={e => e.currentTarget.style.color='var(--color-text-muted)'}
+                  >
+                    {l.label}
+                  </Link>
+                ))}
+              </div>
             </div>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-slate-900 mb-3">
-              Resources
-            </h3>
-
-            <div className="flex flex-col gap-2 text-slate-600">
-              <a href="#">FAQ</a>
-              <a href="#">Privacy</a>
-              <a href="#">Terms</a>
-            </div>
-          </div>
-
-          <div>
-            <h3 className="font-semibold text-slate-900 mb-3">
-              Social
-            </h3>
-
-            <div className="flex flex-col gap-2 text-slate-600">
-              <a href="#">GitHub</a>
-              <a href="#">LinkedIn</a>
-              <a href="#">Twitter</a>
-            </div>
-          </div>
-
+          ))}
         </div>
 
-        <div className="border-t border-slate-200 mt-10 pt-6 text-center text-slate-500">
-          © {currentYear} CreatorHub. All rights reserved.
+        <div style={{borderTop:'1px solid var(--color-border)',marginTop:'3rem',paddingTop:'1.5rem',display:'flex',flexWrap:'wrap',justifyContent:'space-between',alignItems:'center',gap:'0.75rem'}}>
+          <span style={{color:'var(--color-text-faint)',fontSize:'0.8rem'}}>© {currentYear} CreatorHub. All rights reserved.</span>
+          <span style={{color:'var(--color-text-faint)',fontSize:'0.8rem'}}>Made with ☕ for creators.</span>
         </div>
-
       </div>
     </footer>
   );

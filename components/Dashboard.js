@@ -1,151 +1,180 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSession } from "next-auth/react"
 import { useRouter } from 'next/navigation'
 import { fetchuser, updateProfile } from '@/actions/useractions'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Bounce } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { Bounce } from 'react-toastify'
+import { User, Mail, AtSign, Image, Layers, FileText, Target, CreditCard, Lock, Save } from 'lucide-react'
+
+const FIELDS = [
+  { name:'name',        label:'Display Name',      type:'text',   icon:<User size={15}/>,       placeholder:'Your full name' },
+  { name:'email',       label:'Email Address',     type:'email',  icon:<Mail size={15}/>,       placeholder:'you@example.com' },
+  { name:'username',    label:'Username',          type:'text',   icon:<AtSign size={15}/>,     placeholder:'your_handle' },
+  { name:'profilepic',  label:'Profile Picture URL',type:'text',  icon:<Image size={15}/>,      placeholder:'https://...' },
+  { name:'coverpic',    label:'Cover Picture URL', type:'text',   icon:<Layers size={15}/>,     placeholder:'https://...' },
+  { name:'bio',         label:'Bio',               type:'textarea',icon:<FileText size={15}/>, placeholder:'Tell your story...' },
+  { name:'goal',        label:'Funding Goal (₹)',  type:'number', icon:<Target size={15}/>,     placeholder:'50000' },
+  { name:'razorpayid',  label:'Razorpay ID',       type:'text',   icon:<CreditCard size={15}/>, placeholder:'rzp_live_...' },
+  { name:'razorpaysecret', label:'Razorpay Secret',type:'password',icon:<Lock size={15}/>,      placeholder:'•••••••••••••••••••' },
+]
 
 const Dashboard = () => {
-    const { data: session, update } = useSession()
-    const router = useRouter()
-    const [form, setform] = useState({})
+  const { data: session } = useSession()
+  const router = useRouter()
+  const [form, setform] = useState({})
+  const [saving, setSaving] = useState(false)
 
-    useEffect(() => {
-        console.log(session)
-
-        if (!session) {
-            router.push('/login')
-        }
-        else {
-            getData()
-        }
-    }, [])
-
-    const getData = async () => {
-        let u = await fetchuser(session.user.name)
-        setform(u)
+  useEffect(() => {
+    if (!session) {
+      router.push('/login')
+    } else {
+      getData()
     }
+  }, [session, router])
 
-    const handleChange = (e) => {
-        setform({ ...form, [e.target.name]: e.target.value })
-    }
+  const getData = async () => {
+    let u = await fetchuser(session.user.name)
+    setform(u)
+  }
 
-    const handleSubmit = async (e) => {
+  const handleChange = (e) => {
+    setform({ ...form, [e.target.name]: e.target.value })
+  }
 
-        let a = await updateProfile(e, session.user.name)
-        toast('Profile Updated', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-        });
-    }
+  const handleSubmit = async (e) => {
+    setSaving(true)
+    await updateProfile(e, session.user.name)
+    setSaving(false)
+    toast('Profile updated successfully!', {
+      position: "top-right",
+      autoClose: 4000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      theme: "dark",
+      transition: Bounce,
+    })
+  }
 
+  return (
+    <>
+      <ToastContainer position="top-right" autoClose={4000} theme="dark" />
 
+      <div style={{minHeight:'100vh',paddingBlock:'3rem'}}>
+        <div className="container-custom" style={{maxWidth:'800px'}}>
 
+          {/* Header */}
+          <div className="mb-10">
+            <div className="badge mb-3">Settings</div>
+            <h1 style={{fontSize:'clamp(1.8rem,4vw,2.5rem)',fontWeight:800,letterSpacing:'-0.03em',color:'var(--color-text)'}}>Creator Profile</h1>
+            <p style={{color:'var(--color-text-muted)',marginTop:'0.5rem'}}>Manage your public creator page and payment settings.</p>
+          </div>
 
-
-    return (
-        <>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                theme="light"
-            />
-            {/* Same as */}
-            <ToastContainer />
-            <div className='container mx-auto py-5 px-6 '>
-                <h1 className='text-center my-5 text-3xl font-bold'>Welcome to your Dashboard</h1>
-
-                <form className="max-w-2xl mx-auto" action={handleSubmit}>
-
-                    <div className='my-2'>
-                        <label htmlFor="name" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                        <input value={form.name ? form.name : ""} onChange={handleChange} type="text" name='name' id="name" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    </div>
-                    {/* input for email */}
-                    <div className="my-2">
-                        <label htmlFor="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                        <input value={form.email ? form.email : ""} onChange={handleChange} type="email" name='email' id="email" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    </div>
-                    {/* input forusername */}
-                    <div className='my-2'>
-                        <label htmlFor="username" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Username</label>
-                        <input value={form.username ? form.username : ""} onChange={handleChange} type="text" name='username' id="username" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    </div>
-                    {/* input for profile picture of input type text */}
-                    <div className="my-2">
-                        <label htmlFor="profilepic" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Profile Picture</label>
-                        <input value={form.profilepic ? form.profilepic : ""} onChange={handleChange} type="text" name='profilepic' id="profilepic" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    </div>
-
-                    {/* input for cover pic  */}
-                    <div className="my-2">
-                        <label htmlFor="coverpic" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cover Picture</label>
-                        <input value={form.coverpic ? form.coverpic : ""} onChange={handleChange} type="text" name='coverpic' id="coverpic" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    </div>
-                    <div className="my-2">
-                        <label htmlFor="bio" className="block mb-2 text-sm font-medium text-white">
-                            Bio
-                        </label>
-                        <textarea
-                            value={form.bio ? form.bio : ""}
-                            onChange={handleChange}
-                            name="bio"
-                            id="bio"
-                            rows="4"
-                            className="block w-full p-2 rounded-lg bg-gray-700 text-white"
-                        />
-                    </div>
-
-                    <div className="my-2">
-                        <label htmlFor="goal" className="block mb-2 text-sm font-medium text-white">
-                            Funding Goal (₹)
-                        </label>
-                        <input
-                            value={form.goal ? form.goal : ""}
-                            onChange={handleChange}
-                            type="number"
-                            name="goal"
-                            id="goal"
-                            className="block w-full p-2 rounded-lg bg-gray-700 text-white"
-                        />
-                    </div>
-                    {/* input razorpay id */}
-                    <div className="my-2">
-                        <label htmlFor="razorpayid" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Razorpay Id</label>
-                        <input value={form.razorpayid ? form.razorpayid : ""} onChange={handleChange} type="text" name='razorpayid' id="razorpayid" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    </div>
-                    {/* input razorpay secret */}
-                    <div className="my-2">
-                        <label htmlFor="razorpaysecret" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Razorpay Secret</label>
-                        <input value={form.razorpaysecret ? form.razorpaysecret : ""} onChange={handleChange} type="text" name='razorpaysecret' id="razorpaysecret" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
-                    </div>
-
-                    {/* Submit Button  */}
-                    <div className="my-6">
-                        <button type="submit" className="block w-full p-2 text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-blue-500 focus:ring-4 focus:outline-none   dark:focus:ring-blue-800 font-medium text-sm">Save</button>
-                    </div>
-                </form>
-
-
+          {/* Preview strip */}
+          {session && (
+            <div className="glass-card p-4 mb-8 flex items-center justify-between gap-4 flex-wrap">
+              <div style={{display:'flex',alignItems:'center',gap:'0.875rem'}}>
+                <div className="avatar w-11 h-11 text-base">
+                  {session?.user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                </div>
+                <div>
+                  <div style={{fontWeight:600,color:'var(--color-text)',fontSize:'0.95rem'}}>{session?.user?.name}</div>
+                  <div style={{color:'var(--color-text-faint)',fontSize:'0.8rem'}}>{session?.user?.email}</div>
+                </div>
+              </div>
+              <a
+                href={`/${session?.user?.name}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-ghost"
+                style={{fontSize:'0.8rem',padding:'0.4rem 0.875rem'}}
+              >
+                View Public Page →
+              </a>
             </div>
-        </>
-    )
+          )}
+
+          {/* Form */}
+          <form action={handleSubmit}>
+            <div className="glass-card p-7 mb-5">
+              <h2 style={{fontWeight:600,fontSize:'1rem',color:'var(--color-text)',marginBottom:'1.5rem',paddingBottom:'1rem',borderBottom:'1px solid var(--color-border)'}}>Public Information</h2>
+              <div style={{display:'grid',gap:'1.25rem'}}>
+                {FIELDS.slice(0,5).map((f) => (
+                  <div key={f.name}>
+                    <label htmlFor={f.name} className="form-label" style={{display:'flex',alignItems:'center',gap:'0.4rem'}}>
+                      {f.icon} {f.label}
+                    </label>
+                    <input
+                      id={f.name}
+                      name={f.name}
+                      type={f.type}
+                      value={form[f.name] || ''}
+                      onChange={handleChange}
+                      placeholder={f.placeholder}
+                      className="input-field"
+                    />
+                  </div>
+                ))}
+                {/* Bio textarea */}
+                <div>
+                  <label htmlFor="bio" className="form-label" style={{display:'flex',alignItems:'center',gap:'0.4rem'}}>
+                    <FileText size={15}/> Bio
+                  </label>
+                  <textarea
+                    id="bio" name="bio"
+                    value={form.bio || ''}
+                    onChange={handleChange}
+                    rows={4}
+                    placeholder="Tell your supporters about yourself..."
+                    className="input-field"
+                    style={{resize:'vertical',lineHeight:'1.7'}}
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="glass-card p-7 mb-5">
+              <h2 style={{fontWeight:600,fontSize:'1rem',color:'var(--color-text)',marginBottom:'1.5rem',paddingBottom:'1rem',borderBottom:'1px solid var(--color-border)'}}>Funding</h2>
+              <div>
+                <label htmlFor="goal" className="form-label" style={{display:'flex',alignItems:'center',gap:'0.4rem'}}>
+                  <Target size={15}/> Funding Goal (₹)
+                </label>
+                <input id="goal" name="goal" type="number" value={form.goal || ''} onChange={handleChange} placeholder="50000" className="input-field" />
+              </div>
+            </div>
+
+            <div className="glass-card p-7 mb-8">
+              <h2 style={{fontWeight:600,fontSize:'1rem',color:'var(--color-text)',marginBottom:'0.5rem',paddingBottom:'1rem',borderBottom:'1px solid var(--color-border)'}}>Payment Integration</h2>
+              <p style={{color:'var(--color-text-muted)',fontSize:'0.83rem',marginBottom:'1.25rem'}}>Connect your Razorpay account to start receiving payments.</p>
+              <div style={{display:'grid',gap:'1.25rem'}}>
+                <div>
+                  <label htmlFor="razorpayid" className="form-label" style={{display:'flex',alignItems:'center',gap:'0.4rem'}}><CreditCard size={15}/> Razorpay ID</label>
+                  <input id="razorpayid" name="razorpayid" type="text" value={form.razorpayid || ''} onChange={handleChange} placeholder="rzp_live_..." className="input-field" />
+                </div>
+                <div>
+                  <label htmlFor="razorpaysecret" className="form-label" style={{display:'flex',alignItems:'center',gap:'0.4rem'}}><Lock size={15}/> Razorpay Secret</label>
+                  <input id="razorpaysecret" name="razorpaysecret" type="password" value={form.razorpaysecret || ''} onChange={handleChange} placeholder="•••••••••••••••••" className="input-field" />
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              disabled={saving}
+              className="btn-primary"
+              style={{width:'100%',justifyContent:'center',padding:'0.8rem',fontSize:'0.95rem',opacity: saving ? 0.7 : 1}}
+            >
+              <Save size={16}/>
+              {saving ? 'Saving...' : 'Save Changes'}
+            </button>
+          </form>
+        </div>
+      </div>
+    </>
+  )
 }
 
 export default Dashboard
