@@ -45,7 +45,7 @@ const Dashboard = () => {
             progress: undefined,
             theme: "light",
             transition: Bounce,
-            });
+        });
     }
 
 
@@ -97,6 +97,33 @@ const Dashboard = () => {
                     <div className="my-2">
                         <label htmlFor="coverpic" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cover Picture</label>
                         <input value={form.coverpic ? form.coverpic : ""} onChange={handleChange} type="text" name='coverpic' id="coverpic" className="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 text-xs focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+                    </div>
+                    <div className="my-2">
+                        <label htmlFor="bio" className="block mb-2 text-sm font-medium text-white">
+                            Bio
+                        </label>
+                        <textarea
+                            value={form.bio ? form.bio : ""}
+                            onChange={handleChange}
+                            name="bio"
+                            id="bio"
+                            rows="4"
+                            className="block w-full p-2 rounded-lg bg-gray-700 text-white"
+                        />
+                    </div>
+
+                    <div className="my-2">
+                        <label htmlFor="goal" className="block mb-2 text-sm font-medium text-white">
+                            Funding Goal (₹)
+                        </label>
+                        <input
+                            value={form.goal ? form.goal : ""}
+                            onChange={handleChange}
+                            type="number"
+                            name="goal"
+                            id="goal"
+                            className="block w-full p-2 rounded-lg bg-gray-700 text-white"
+                        />
                     </div>
                     {/* input razorpay id */}
                     <div className="my-2">

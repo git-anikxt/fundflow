@@ -13,7 +13,7 @@ import { notFound } from "next/navigation"
 const PaymentPage = ({ username }) => {
     // const { data: session } = useSession()
 
-    const [paymentform, setPaymentform] = useState({name: "", message: "", amount: ""})
+    const [paymentform, setPaymentform] = useState({ name: "", message: "", amount: "" })
     const [currentUser, setcurrentUser] = useState({})
     const [payments, setPayments] = useState([])
     const searchParams = useSearchParams()
@@ -24,23 +24,23 @@ const PaymentPage = ({ username }) => {
     }, [])
 
     useEffect(() => {
-        if(searchParams.get("paymentdone") == "true"){
-        toast('Thanks for your donation!', {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
+        if (searchParams.get("paymentdone") == "true") {
+            toast('Thanks for your donation!', {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
             });
         }
         router.push(`/${username}`)
-     
+
     }, [])
-    
+
 
     const handleChange = (e) => {
         setPaymentform({ ...paymentform, [e.target.name]: e.target.value })
@@ -50,7 +50,7 @@ const PaymentPage = ({ username }) => {
         let u = await fetchuser(username)
         setcurrentUser(u)
         let dbpayments = await fetchpayments(username)
-        setPayments(dbpayments) 
+        setPayments(dbpayments)
     }
 
 
@@ -84,7 +84,7 @@ const PaymentPage = ({ username }) => {
         rzp1.open();
     }
 
-    
+
     return (
         <>
             <ToastContainer
@@ -115,28 +115,84 @@ const PaymentPage = ({ username }) => {
                     @{username}
                 </div>
                 <div className='text-slate-400'>
-                    Lets help {username} get a chai!
-
+                    {currentUser.bio || `Let's help ${username} get a chai!`}
                 </div>
                 <div className='text-slate-400'>
-                  {payments.length} Payments .   ₹{payments.reduce((a, b) => a + b.amount, 0)} raised
+                    {payments.length} Payments .   ₹{payments.reduce((a, b) => a + b.amount, 0)} raised
                 </div>
+                <div className="w-[80%] md:w-[50%] mt-4">
+                    <div className="flex justify-between text-sm text-slate-400 mb-1">
+                        <span>
+                            ₹{payments.reduce((a, b) => a + b.amount, 0)}
+                        </span>
+                        <span>
+                            ₹{currentUser.goal || 50000}
+                        </span>
+                    </div>
 
+                    <div className="w-full bg-slate-700 rounded-full h-4">
+                        <div
+                            className="bg-green-500 h-4 rounded-full"
+                            style={{
+                                width: `${Math.min(
+                                    (payments.reduce((a, b) => a + b.amount, 0) /
+                                        (currentUser.goal || 50000)) * 100,
+                                    100
+                                )}%`
+                            }}
+                        />
+                    </div>
+                </div>
                 <div className="payment flex gap-3 w-[80%] mt-11 flex-col md:flex-row">
-                    <div className="supporters w-full md:w-1/2 bg-slate-900 rounded-lg text-white px-2 md:p-10">
-                        {/* Show list of all the supporters as a leaderboard  */}
-                        <h2 className='text-2xl font-bold my-5'> Top 10 Supporters</h2>
-                        <ul className='mx-5 text-lg'>
-                            {payments.length == 0 && <li>No payments yet</li>}
-                            {payments.map((p, i) => {
-                                return <li key={i} className='my-4 flex gap-2 items-center'>
-                                    <img width={33} src="avatar.gif" alt="user avatar" />
-                                    <span>
-                                        {p.name} donated <span className='font-bold'>₹{p.amount}</span> with a message &quot;{p.message}&quot;
-                                    </span>
-                                </li>
-                            })}
+                    <div className="supporters w-full md:w-1/2 bg-slate-900/70 backdrop-blur-md border border-slate-800 rounded-2xl text-white p-6">
 
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-2xl font-bold">
+                                🏆 Top Supporters
+                            </h2>
+
+                            <span className="text-sm text-slate-400">
+                                {payments.length} supporters
+                            </span>
+                        </div>
+
+                        <ul className="space-y-4">
+
+                            {payments.length === 0 && (
+                                <div className="text-center text-slate-400 py-8">
+                                    No supporters yet. Be the first one 🚀
+                                </div>
+                            )}
+
+                            {payments
+                                .sort((a, b) => b.amount - a.amount)
+                                .slice(0, 10)
+                                .map((p, i) => (
+                                    <li
+                                        key={i}
+                                        className="flex items-center gap-4 bg-slate-800/50 rounded-xl p-3 hover:bg-slate-800 transition"
+                                    >
+
+                                        <div className="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 flex items-center justify-center font-bold">
+                                            {p.name?.charAt(0).toUpperCase()}
+                                        </div>
+
+                                        <div className="flex-1">
+                                            <div className="font-semibold">
+                                                {p.name}
+                                            </div>
+
+                                            <div className="text-sm text-slate-400">
+                                                {p.message || "Supported the creator"}
+                                            </div>
+                                        </div>
+
+                                        <div className="font-bold text-green-400">
+                                            ₹{p.amount}
+                                        </div>
+
+                                    </li>
+                                ))}
                         </ul>
                     </div>
 
@@ -154,14 +210,40 @@ const PaymentPage = ({ username }) => {
                             <input onChange={handleChange} value={paymentform.amount} name="amount" type="text" className='w-full p-3 rounded-lg bg-slate-800' placeholder='Enter Amount' />
 
 
-                            <button onClick={() => pay(Number.parseInt(paymentform.amount) * 100)} type="button" className="text-white bg-gradient-to-br from-purple-900 to-blue-900 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 disabled:bg-slate-600 disabled:from-purple-100" disabled={paymentform.name?.length < 3 || paymentform.message?.length < 4 || paymentform.amount?.length<1}>Pay</button>
+                            <button onClick={() => pay(Number.parseInt(paymentform.amount) * 100)} type="button" className="text-white bg-gradient-to-br from-purple-900 to-blue-900 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 disabled:bg-slate-600 disabled:from-purple-100" disabled={paymentform.name?.length < 3 || paymentform.message?.length < 4 || paymentform.amount?.length < 1}>Pay</button>
 
                         </div>
                         {/* Or choose from these amounts  */}
-                        <div className='flex flex-col md:flex-row gap-2 mt-5'>
-                            <button className='bg-slate-800 p-3 rounded-lg' onClick={() => pay(1000)}>Pay ₹10</button>
-                            <button className='bg-slate-800 p-3 rounded-lg' onClick={() => pay(2000)}>Pay ₹20</button>
-                            <button className='bg-slate-800 p-3 rounded-lg' onClick={() => pay(3000)}>Pay ₹30</button>
+                        <div className='grid grid-cols-2 md:grid-cols-4 gap-3 mt-6'>
+
+                            <button
+                                className='bg-slate-800 hover:bg-slate-700 transition-all p-3 rounded-xl font-semibold'
+                                onClick={() => pay(5000)}
+                            >
+                                ☕ ₹50
+                            </button>
+
+                            <button
+                                className='bg-slate-800 hover:bg-slate-700 transition-all p-3 rounded-xl font-semibold'
+                                onClick={() => pay(10000)}
+                            >
+                                ☕☕ ₹100
+                            </button>
+
+                            <button
+                                className='bg-slate-800 hover:bg-slate-700 transition-all p-3 rounded-xl font-semibold'
+                                onClick={() => pay(25000)}
+                            >
+                                🚀 ₹250
+                            </button>
+
+                            <button
+                                className='bg-gradient-to-r from-purple-600 to-blue-600 hover:scale-105 transition-all p-3 rounded-xl font-bold'
+                                onClick={() => pay(50000)}
+                            >
+                                ⭐ ₹500
+                            </button>
+
                         </div>
                     </div>
                 </div>
