@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation'
 import { Trophy, Heart, MessageSquare, DollarSign } from 'lucide-react'
 
 const PaymentPage = ({ username }) => {
-  const [paymentform, setPaymentform] = useState({ name: '', message: '', amount: '' })
+  const [paymentform, setPaymentform] = useState({ name: '', message: '', amount: '', email: '' })
   const [currentUser, setcurrentUser] = useState({})
   const [payments, setPayments] = useState([])
   const searchParams = useSearchParams()
@@ -40,6 +40,7 @@ const PaymentPage = ({ username }) => {
 
   const pay = async (amount) => {
     let a = await initiate(amount, username, paymentform)
+
     let orderId = a.id
     var options = {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
@@ -49,7 +50,7 @@ const PaymentPage = ({ username }) => {
       description: `Support ${username}`,
       order_id: orderId,
       callback_url: `${process.env.NEXT_PUBLIC_URL}/api/razorpay`,
-      prefill: { name: paymentform.name, email: '', contact: '' },
+      prefill: { name: paymentform.name, email: paymentform.email, contact: '' },
       theme: { color: '#6366f1' },
     }
     var rzp1 = new Razorpay(options)
@@ -59,7 +60,7 @@ const PaymentPage = ({ username }) => {
   const totalRaised = payments.reduce((a, b) => a + b.amount, 0)
   const goal = currentUser.goal || 50000
   const progress = Math.min((totalRaised / goal) * 100, 100)
-  const isPayDisabled = paymentform.name?.length < 3 || paymentform.message?.length < 4 || paymentform.amount?.length < 1
+  const isPayDisabled = paymentform.name?.length < 3 || paymentform.message?.length < 4 || paymentform.amount?.length < 1 || paymentform.email?.length < 5
 
   return (
     <>
@@ -185,6 +186,11 @@ const PaymentPage = ({ username }) => {
                 <label className="form-label">Message</label>
                 <input onChange={handleChange} value={paymentform.message} name='message' type='text'
                   className='input-field' placeholder='Say something nice...' />
+              </div>
+              <div>
+                <label className="form-label">Email</label>
+                <input onChange={handleChange} value={paymentform.email} name='email' type='email'
+                  className='input-field' placeholder='Enter your email' />
               </div>
               <div>
                 <label className="form-label">Amount (₹)</label>

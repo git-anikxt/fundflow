@@ -22,29 +22,24 @@ export const initiate = async (amount, to_username, paymentform) => {
     const options = {
         amount: Number.parseInt(amount),
         currency: "INR",
+        notes: {
+            name: paymentform.name,
+            message: paymentform.message,
+            to_user: to_username,
+        }
     }
 
     const order = await instance.orders.create(options)
-console.log("ORDER CREATED:", order)
 
-console.log({
-    oid: order.id,
-    amount: amount / 100,
-    to_user: to_username,
-    name: paymentform.name,
-    message: paymentform.message,
-})
-    
-const payment = await Payment.create({
-    oid: order.id,
-    amount: amount / 100,
-    to_user: to_username,
-    name: paymentform.name,
-    message: paymentform.message,
-    done: false,
-})
+    await Payment.create({
+        oid: order.id,
+        amount: amount / 100,
+        to_user: to_username,
+        name: paymentform.name,
+        message: paymentform.message,
+        done: false,
+    })
 
-console.log("PAYMENT SAVED:", payment)
     return order
 }
 
@@ -54,7 +49,6 @@ export const fetchuser = async (username) => {
     const user = await User.findOne({ username })
 
     if (!user) {
-        console.log("USER NOT FOUND:", username)
         return null
     }
 
