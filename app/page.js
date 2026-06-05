@@ -1,12 +1,52 @@
 "use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { ArrowRight, Heart, Users, TrendingUp, Zap, Shield, Globe } from "lucide-react";
+import { ArrowRight, Heart, Users, TrendingUp, Zap, Shield, Globe, GitBranch, UserRound } from "lucide-react";
+
+const founders = [
+  {
+    name: "Aniket Sharma",
+    role: "Full Stack Developer",
+    badge: "Founder",
+    avatar: "A",
+    username: "aniketsharma",
+    github: "https://github.com/aniketsharma",
+    linkedin: "https://linkedin.com/in/aniketsharma",
+    about:
+      "Building AI workflow automations, modern web applications, creator tools, and intuitive user experiences. Passionate about full-stack development, automation, and product design.",
+  },
+  {
+    name: "Deep Singh",
+    role: "Full Stack Developer",
+    badge: "Founder",
+    avatar: "D",
+    username: "deepsingh7505",
+    github: "https://github.com/deepsingh7505",
+    linkedin: "https://linkedin.com/in/deepsingh7505",
+    about:
+      "Building scalable full-stack applications with Next.js, React, and modern web technologies. Focused on creating performant products, clean architectures, and developer-friendly solutions.",
+  },
+];
 
 
 
 export default function Home() {
   const { data: session } = useSession();
+  const [activeFounderIndex, setActiveFounderIndex] = useState(0);
+  const [isCarouselPaused, setIsCarouselPaused] = useState(false);
+  const activeFounder = founders[activeFounderIndex];
+
+  useEffect(() => {
+    if (isCarouselPaused) return;
+
+    const interval = setInterval(() => {
+      setActiveFounderIndex((currentIndex) => (currentIndex + 1) % founders.length);
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [isCarouselPaused]);
+
   return (
     <>
       {/* Hero */}
@@ -47,132 +87,200 @@ export default function Home() {
               </div>
 </div>
 <div className="relative z-10">
-  <div className="glass-card p-6">
+  <div
+    className="glass-card glass-card-hover p-6"
+    onMouseEnter={() => setIsCarouselPaused(true)}
+    onMouseLeave={() => setIsCarouselPaused(false)}
+    style={{
+      overflow: "hidden",
+      boxShadow: "var(--shadow-lg)",
+    }}
+  >
+    <div key={activeFounder.name} className="founder-spotlight-slide">
+      {/* Header */}
+      <div
+        className="flex items-center justify-between gap-4 mb-6"
+        style={{
+          padding: "1rem",
+          borderRadius: "16px",
+          background: "rgba(255,255,255,0.03)",
+          border: "1px solid var(--color-border)",
+        }}
+      >
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="avatar w-12 h-12 text-lg">
+            {activeFounder.avatar}
+          </div>
 
-    {/* Header */}
-    <div
-      className="flex items-center justify-between mb-6"
-      style={{
-        padding: "1rem",
-        borderRadius: "16px",
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid var(--color-border)",
-      }}
-    >
-      <div className="flex items-center gap-3">
-        <div className="avatar w-12 h-12 text-lg">
-          A
+          <div className="min-w-0">
+            <h3
+              className="font-semibold truncate"
+              style={{
+                color: "white",
+                fontSize: "1.15rem",
+                lineHeight: 1.2,
+              }}
+            >
+              {activeFounder.name}
+            </h3>
+
+            <p
+              className="truncate"
+              style={{
+                color: "var(--color-text-muted)",
+                fontSize: "0.9rem",
+              }}
+            >
+              {activeFounder.role}
+            </p>
+          </div>
         </div>
 
-        <div>
-          <h3
-            className="font-semibold"
+        <span className="badge">
+          {activeFounder.badge}
+        </span>
+      </div>
+
+      {/* Connect With Me */}
+      <div className="mb-4">
+        <p
+          style={{
+            color: "var(--color-text-muted)",
+            marginBottom: "0.6rem",
+            fontSize: "0.9rem",
+          }}
+        >
+          Connect With Me
+        </p>
+
+        <div
+          className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+          style={{
+            padding: "1rem",
+            borderRadius: "14px",
+            border: "1px solid var(--color-border)",
+            background: "rgba(255,255,255,0.02)",
+          }}
+        >
+          <Link
+            href={activeFounder.github}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-ghost founder-social-link justify-center w-full"
             style={{
+              borderRadius: "12px",
+              padding: "0.78rem 1rem",
+              background: "rgba(255,255,255,0.035)",
               color: "white",
-              fontSize: "1.15rem",
-              lineHeight: 1.2,
+              fontWeight: "600",
             }}
           >
-            Aniket Sharma
-          </h3>
+            <GitBranch size={17} />
+            GitHub
+          </Link>
 
-          <p
+          <Link
+            href={activeFounder.linkedin}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn-ghost founder-social-link justify-center w-full"
             style={{
-              color: "var(--color-text-muted)",
-              fontSize: "0.9rem",
+              borderRadius: "12px",
+              padding: "0.78rem 1rem",
+              background: "rgba(255,255,255,0.035)",
+              color: "white",
+              fontWeight: "600",
             }}
           >
-            Full Stack Developer
-          </p>
+            <UserRound size={17} />
+            LinkedIn
+          </Link>
         </div>
       </div>
 
-      <span className="badge">
-        Founder
-      </span>
-    </div>
+      {/* About */}
+      <div className="mb-5">
+        <p
+          style={{
+            color: "var(--color-text-muted)",
+            marginBottom: "0.6rem",
+            fontSize: "0.9rem",
+          }}
+        >
+          About
+        </p>
 
-    {/* Funding Goal */}
-    <div className="mb-4">
-      <p
-        style={{
-          color: "var(--color-text-muted)",
-          marginBottom: "0.6rem",
-          fontSize: "0.9rem",
-        }}
-      >
-        Funding Goal
-      </p>
+        <div
+          style={{
+            minHeight: "8.6rem",
+            padding: "1rem",
+            borderRadius: "14px",
+            border: "1px solid var(--color-border)",
+            background: "rgba(255,255,255,0.02)",
+            color: "white",
+            lineHeight: "1.7",
+          }}
+        >
+          {activeFounder.about}
+        </div>
+      </div>
 
-      <div
-        style={{
-          padding: "1rem",
-          borderRadius: "14px",
-          border: "1px solid var(--color-border)",
-          background: "rgba(255,255,255,0.02)",
-          color: "white",
-          fontWeight: "600",
-        }}
-      >
-        ₹30,000 Goal
+      {/* Buttons */}
+      <div className="flex flex-col sm:flex-row gap-3">
+        <Link
+          href={`/${activeFounder.username}`}
+          className="btn-primary flex-1 justify-center"
+          style={{
+            borderRadius: "14px",
+            padding: "0.8rem",
+            textDecoration: "none",
+          }}
+        >
+          Support Creator
+        </Link>
+
+        <Link
+          href={`/${activeFounder.username}`}
+          className="btn-ghost flex-1 justify-center"
+          style={{
+            borderRadius: "14px",
+            padding: "0.8rem",
+            textDecoration: "none",
+          }}
+        >
+          View Page
+        </Link>
       </div>
     </div>
 
-    {/* About */}
-    <div className="mb-5">
-      <p
-        style={{
-          color: "var(--color-text-muted)",
-          marginBottom: "0.6rem",
-          fontSize: "0.9rem",
-        }}
-      >
-        About
-      </p>
-
-      <div
-        style={{
-          padding: "1rem",
-          borderRadius: "14px",
-          border: "1px solid var(--color-border)",
-          background: "rgba(255,255,255,0.02)",
-          color: "white",
-          lineHeight: "1.7",
-        }}
-      >
-        Building open-source projects and sharing knowledge with the community.
-      </div>
+    <div className="flex items-center justify-center gap-2 mt-5">
+      {founders.map((founder, index) => (
+        <button
+          key={founder.name}
+          type="button"
+          aria-label={`Show ${founder.name}`}
+          aria-current={index === activeFounderIndex}
+          onClick={() => setActiveFounderIndex(index)}
+          className="founder-dot"
+          style={{
+            width: index === activeFounderIndex ? "1.35rem" : "0.55rem",
+            height: "0.55rem",
+            borderRadius: "9999px",
+            border: "none",
+            cursor: "pointer",
+            background:
+              index === activeFounderIndex
+                ? "linear-gradient(135deg, var(--color-primary), #a78bfa)"
+                : "rgba(255,255,255,0.22)",
+            boxShadow:
+              index === activeFounderIndex
+                ? "0 0 16px var(--color-primary-glow)"
+                : "none",
+            transition: "all var(--transition)",
+          }}
+        />
+      ))}
     </div>
-
-    {/* Buttons */}
-    <div className="flex gap-3">
-      
-    <Link
-  href="/aniketsharma"
-  className="btn-primary flex-1 justify-center"
-  style={{
-    borderRadius: "14px",
-    padding: "0.8rem",
-    textDecoration: "none",
-  }}
->
-  Support Creator
-</Link>
-
-<Link
-  href="/aniketsharma"
-  className="btn-ghost flex-1 justify-center"
-  style={{
-    borderRadius: "14px",
-    padding: "0.8rem",
-    textDecoration: "none",
-  }}
->
-  View Page
-</Link>
-      
-    </div>
-
   </div>
 </div>
 </div> 
@@ -351,6 +459,40 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <style jsx>{`
+        .founder-spotlight-slide {
+          animation: founderSpotlightIn 420ms cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .founder-social-link:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 24px rgba(0, 0, 0, 0.28);
+        }
+
+        .founder-dot:hover {
+          background: rgba(255, 255, 255, 0.36) !important;
+          transform: translateY(-1px);
+        }
+
+        @keyframes founderSpotlightIn {
+          from {
+            opacity: 0;
+            transform: translateX(18px) scale(0.985);
+          }
+
+          to {
+            opacity: 1;
+            transform: translateX(0) scale(1);
+          }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .founder-spotlight-slide {
+            animation: none;
+          }
+        }
+      `}</style>
     </>
   );
 }
