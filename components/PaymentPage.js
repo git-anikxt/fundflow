@@ -46,7 +46,7 @@ const PaymentPage = ({ username }) => {
       key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
       amount: amount,
       currency: 'INR',
-      name: 'CreatorHub',
+      name: 'FundFlow',
       description: `Support ${username}`,
       order_id: orderId,
       callback_url: `${process.env.NEXT_PUBLIC_URL}/api/razorpay`,

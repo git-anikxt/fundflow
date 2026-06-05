@@ -10,7 +10,7 @@ const Footer = () => {
           <div>
             <div style={{display:'flex',alignItems:'center',gap:'0.6rem',marginBottom:'0.75rem'}}>
               <div className="avatar w-8 h-8" style={{fontSize:'0.75rem',fontWeight:800,background:'linear-gradient(135deg,#6366f1,#a78bfa)'}}>C</div>
-              <span style={{fontWeight:700,fontSize:'1rem',color:'var(--color-text)'}}>CreatorHub</span>
+              <span style={{fontWeight:700,fontSize:'1rem',color:'var(--color-text)'}}>FundFlow</span>
             </div>
             <p style={{color:'var(--color-text-muted)',fontSize:'0.875rem',lineHeight:'1.7',maxWidth:'220px'}}>
               Support creators directly and help bring meaningful projects to life.
@@ -49,7 +49,7 @@ const Footer = () => {
         </div>
 
         <div style={{borderTop:'1px solid var(--color-border)',marginTop:'3rem',paddingTop:'1.5rem',display:'flex',flexWrap:'wrap',justifyContent:'space-between',alignItems:'center',gap:'0.75rem'}}>
-          <span style={{color:'var(--color-text-faint)',fontSize:'0.8rem'}}>© {currentYear} CreatorHub. All rights reserved.</span>
+          <span style={{color:'var(--color-text-faint)',fontSize:'0.8rem'}}>© {currentYear} FundFlow. All rights reserved.</span>
           <span style={{color:'var(--color-text-faint)',fontSize:'0.8rem'}}>Made with ☕ for creators.</span>
         </div>
       </div>

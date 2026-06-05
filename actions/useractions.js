@@ -107,3 +107,76 @@ export const updateProfile = async (data, oldusername) => {
         success: true,
     }
 }
+export const getDashboardStats = async (username) => {
+    await connectDb()
+
+    const user = await User.findOne({ username })
+
+    const payments = await Payment.find({
+        to_user: username,
+        done: true
+    }).lean()
+
+    const totalRaised = payments.reduce(
+        (sum, payment) => sum + payment.amount,
+        0
+    )
+
+    const supporters = payments.length
+
+    const averageDonation =
+        supporters > 0
+            ? Math.round(totalRaised / supporters)
+            : 0
+
+    const goalProgress = user?.goal
+        ? Math.min(
+              100,
+              Math.round((totalRaised / user.goal) * 100)
+          )
+        : 0
+
+    return {
+        totalRaised,
+        supporters,
+        averageDonation,
+        goalProgress,
+        recentPayments: payments.slice(0, 5),
+    }
+}
+export const getFeaturedCreator = async () => {
+    await connectDb()
+
+    const user = await User.findOne({
+        username: "aniketsharma" // apna actual username
+    }).lean()
+
+    if (!user) return null
+
+    const payments = await Payment.find({
+        to_user: user.username,
+        done: true
+    }).lean()
+
+    const totalRaised = payments.reduce(
+        (sum, payment) => sum + payment.amount,
+        0
+    )
+
+    const progress = user.goal
+        ? Math.min(
+            100,
+            Math.round((totalRaised / user.goal) * 100)
+        )
+        : 0
+
+    return {
+        name: user.name,
+        username: user.username,
+        bio: user.bio,
+        goal: user.goal,
+        totalRaised,
+        progress,
+        profilepic: user.profilepic,
+    }
+}

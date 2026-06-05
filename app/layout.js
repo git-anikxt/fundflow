@@ -7,7 +7,7 @@ import SessionWrapper from "@/components/SessionWrapper";
 const inter = Inter({ subsets: ["latin"], display: "swap" });
 
 export const metadata = {
-  title: "CreatorHub — Fund Your Creative Journey",
+  title: "FundFlow — Fund Your Creative Journey",
   description: "The modern crowdfunding platform for developers, designers, and creators. Get direct support from your community.",
 };
 

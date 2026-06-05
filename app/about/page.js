@@ -7,13 +7,13 @@ export default function About() {
       <section className="hero-mesh dot-grid section-padding">
         <div className="container-custom">
           <div className="max-w-3xl">
-            <div className="badge mb-6">About CreatorHub</div>
+            <div className="badge mb-6">About FundFlow</div>
             <h1 className="text-5xl font-extrabold tracking-tight leading-tight">
               Built for creators,
               <span className="gradient-text block">by creators.</span>
             </h1>
             <p style={{color:'var(--color-text-muted)',fontSize:'1.15rem',lineHeight:'1.8'}} className="mt-6 max-w-2xl">
-              CreatorHub is a direct funding platform that connects independent creators — developers, designers, writers, and makers — with the community that believes in their work.
+              FundFlow is a direct funding platform that connects independent creators — developers, designers, writers, and makers — with the community that believes in their work.
             </p>
           </div>
         </div>
@@ -28,7 +28,7 @@ export default function About() {
                 We believe creators deserve direct access to the people who love their work. No middlemen, no opaque algorithms — just real community support flowing directly to the people building things that matter.
               </p>
               <p style={{color:'var(--color-text-muted)',lineHeight:'1.9'}}>
-                Whether you&apos;re an open-source developer, an indie game maker, or a content creator — CreatorHub gives you the tools to build a sustainable creative income.
+                Whether you&apos;re an open-source developer, an indie game maker, or a content creator — FundFlow gives you the tools to build a sustainable creative income.
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">

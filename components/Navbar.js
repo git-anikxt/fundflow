@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react"
 import { useSession, signOut } from "next-auth/react"
 import Link from "next/link"
 import { Menu, X, LayoutDashboard, User, LogOut, ChevronDown } from "lucide-react"
+import Image from "next/image"
 
 const Navbar = () => {
   const { data: session } = useSession()
@@ -18,28 +19,46 @@ const Navbar = () => {
   }, [])
 
   return (
-    <nav
-      className="sticky top-0 z-50"
-      style={{
-        background: scrolled ? 'rgba(10,10,15,0.92)' : 'rgba(10,10,15,0.7)',
-        backdropFilter: 'blur(20px)',
-        borderBottom: '1px solid var(--color-border)',
-        transition: 'background 0.3s ease',
-      }}
-    >
+   <nav
+  className="sticky top-0 z-50"
+  style={{
+    background: scrolled
+      ? 'rgba(5,7,20,0.98)'
+      : 'rgba(5,7,20,0.85)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    borderBottom: '1px solid rgba(255,255,255,0.04)',
+    boxShadow: scrolled
+      ? '0 4px 30px rgba(0,0,0,0.25)'
+      : 'none',
+    transition: 'all 0.3s ease',
+  }}
+>
       <div className="container-custom">
         <div className="h-16 flex items-center justify-between">
 
-          {/* Logo */}
-          <Link href="/" style={{display:'flex',alignItems:'center',gap:'0.75rem',textDecoration:'none'}}>
-            <div
-              className="avatar w-9 h-9 text-sm"
-              style={{background:'linear-gradient(135deg,#6366f1,#a78bfa)',fontWeight:800,letterSpacing:'-0.02em'}}
-            >
-              C
-            </div>
-            <span style={{fontWeight:700,fontSize:'1rem',color:'var(--color-text)',letterSpacing:'-0.02em'}}>CreatorHub</span>
-          </Link>
+        
+<Link
+  href="/"
+  style={{
+    display: "flex",
+    alignItems: "center",
+    textDecoration: "none",
+  }}
+>
+  <Image
+    src="/logo.png"
+    alt="FundFlow"
+    width={170}
+    height={45}
+    priority
+    style={{
+      width: "170px",
+      height: "auto",
+      objectFit: "contain",
+    }}
+  />
+</Link>
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
@@ -130,6 +149,24 @@ const Navbar = () => {
                     >
                       <User size={15} /> My Creator Page
                     </Link>
+                    <Link
+  href="/dashboard/profile"
+  onClick={() => setShowDropdown(false)}
+  style={{
+    display:'flex',
+    alignItems:'center',
+    gap:'0.7rem',
+    padding:'0.75rem 1rem',
+    color:'var(--color-text-muted)',
+    fontSize:'0.875rem',
+    textDecoration:'none',
+    transition:'background 0.15s'
+  }}
+  onMouseEnter={e => e.currentTarget.style.background='rgba(255,255,255,0.05)'}
+  onMouseLeave={e => e.currentTarget.style.background='transparent'}
+>
+  <User size={15} /> Edit Profile
+</Link>
                     <div style={{height:'1px',background:'var(--color-border)',margin:'0.25rem 0'}}></div>
                     <button
                       onClick={() => signOut()}
