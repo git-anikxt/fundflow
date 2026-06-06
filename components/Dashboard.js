@@ -57,7 +57,7 @@ const Dashboard = () => {
       theme: "dark",
       transition: Bounce,
     })
-  }}
+  }
 console.log("Form data:", form);
   return (
     <>
@@ -91,7 +91,7 @@ console.log("Form data:", form);
             </div>
           </div>
 
-          {/* Preview strip */}}
+          {/* Preview strip */}
           {session && (
             <div className="glass-card p-4 mb-8 flex items-center justify-between gap-4 flex-wrap">
               <div style={{display:'flex',alignItems:'center',gap:'0.875rem'}}>
