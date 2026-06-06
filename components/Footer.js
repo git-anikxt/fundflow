@@ -19,12 +19,12 @@ const Footer = () => {
 
           {[{
             heading: 'Product',
-            links: [{ label:'Home', href:'/' }, { label:'About', href:'/about' }, { label:'Explore', href:'/explore' }]
+            links: [{ label:'Home', href:'/' }, { label:'About', href:'/about' }, { label:'Creators', href:'#' }]
           }, {
             heading: 'Resources',
-            links: [{ label:'FAQ', href:'#' }, { label:'Privacy', href:'#' }, { label:'Terms', href:'#' }]
+            links: [{ label:'Documentation', href:'#' }, { label:'Privacy Policy', href:'#' }, { label:'Terms of Service', href:'#' }]
           }, {
-            heading: 'Social',
+            heading: 'Connect',
             links: [{ label:'GitHub', href:'#' }, { label:'LinkedIn', href:'#' }, { label:'Twitter', href:'#' }]
           }].map((col) => (
             <div key={col.heading}>

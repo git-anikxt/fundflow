@@ -60,7 +60,7 @@ export default function Home() {
                 Creator Funding Platform
               </div>
 
-              <h1 className="text-5xl lg:text-6xl font-extrabold leading-[1.08] tracking-tight">
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-extrabold leading-[1.08] tracking-tight">
                 Support creators
                 <span className="gradient-text block mt-1">you believe in.</span>
               </h1>
@@ -70,20 +70,17 @@ export default function Home() {
               </p>
 
               <div className="flex gap-3 mt-10 flex-wrap">
-                <div className="flex gap-3 mt-10 flex-wrap">
-                  <Link
-                    href={session ? "/dashboard" : "/login"}
-                    className="btn-primary"
-                  >
-                    {session ? "Go To Dashboard" : "Start Creating"}
-                    <ArrowRight size={16} />
-                  </Link>
+                <Link
+                  href={session ? "/dashboard" : "/login"}
+                  className="btn-primary"
+                >
+                  {session ? "Go To Dashboard" : "Become a Creator"}
+                  <ArrowRight size={16} />
+                </Link>
 
-                  <Link href="/about" className="btn-ghost">
-                    Learn More
-                  </Link>
-                </div>
-
+                <Link href="/about" className="btn-ghost">
+                  Learn More
+                </Link>
               </div>
 </div>
 <div className="relative z-10">
@@ -367,6 +364,47 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Social Proof & Trust */}
+      <section className="section-padding" style={{background:'linear-gradient(135deg,rgba(99,102,241,0.05),rgba(192,132,252,0.03))'}}>
+        <div className="container-custom">
+          <div className="text-center mb-16">
+            <div className="badge mb-4 mx-auto" style={{ display: 'inline-flex' }}>Trusted by Creators</div>
+            <h2 className="text-4xl font-bold tracking-tight">Join creators worldwide</h2>
+            <p style={{ color: 'var(--color-text-muted)' }} className="text-lg mt-4 max-w-lg mx-auto">Real creators, real support, real impact.</p>
+          </div>
+
+          {/* Product Benefits */}
+          <div className="grid md:grid-cols-3 gap-4 mb-12">
+            {[
+              { icon: '👤', title: 'Creator Profiles', desc: 'Build your unique profile and showcase your work' },
+              { icon: '🎯', title: 'Funding Goals', desc: 'Set and track your funding objectives' },
+              { icon: '💌', title: 'Community Support', desc: 'Receive direct support from your audience' },
+            ].map((item, i) => (
+              <div key={i} className="glass-card p-6 text-center">
+                <div style={{fontSize:'2.5rem',marginBottom:'0.75rem'}}>{item.icon}</div>
+                <h3 style={{fontSize:'1rem',fontWeight:700,color:'var(--color-text)',marginBottom:'0.4rem'}}>{item.title}</h3>
+                <p style={{fontSize:'0.85rem',color:'var(--color-text-muted)',lineHeight:'1.6'}}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Trust Indicators */}
+          <div className="grid md:grid-cols-3 gap-4">
+            {[
+              { icon: '🔒', title: 'Secure Payments', desc: 'Bank-grade encryption with Razorpay' },
+              { icon: '⚡', title: 'Instant Payouts', desc: 'Receive funds directly to your account' },
+              { icon: '📊', title: 'Transparent Contributions', desc: 'Complete visibility over all transactions' },
+            ].map((item, i) => (
+              <div key={i} style={{padding:'1.5rem',borderRadius:'var(--radius-lg)',background:'rgba(255,255,255,0.02)',border:'1px solid var(--color-border)',textAlign:'center'}}>
+                <div style={{fontSize:'2rem',marginBottom:'0.75rem'}}>{item.icon}</div>
+                <h3 style={{fontWeight:600,color:'var(--color-text)',marginBottom:'0.4rem'}}>{item.title}</h3>
+                <p style={{fontSize:'0.85rem',color:'var(--color-text-muted)'}}>{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="section-padding">
         <div className="container-custom">
 
@@ -375,7 +413,7 @@ export default function Home() {
               How It Works
             </div>
 
-            <h2 className="text-4xl font-bold">
+            <h2 className="text-3xl sm:text-4xl lg:text-4xl font-bold">
               Start receiving support in 3 steps
             </h2>
           </div>
@@ -443,17 +481,17 @@ export default function Home() {
       <section className="section-padding hero-mesh relative overflow-hidden">
         <div className="container-custom text-center relative z-10">
           <div className="badge mb-6 mx-auto" style={{ display: 'inline-flex' }}>Get Started Today</div>
-          <h2 className="text-5xl font-extrabold tracking-tight max-w-2xl mx-auto">
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight max-w-2xl mx-auto">
             Launch your creator journey
           </h2>
-          <p style={{ color: 'var(--color-text-muted)' }} className="mt-5 text-lg max-w-lg mx-auto">
+          <p style={{ color: 'var(--color-text-muted)' }} className="mt-5 text-base sm:text-lg max-w-lg mx-auto">
             Build your page, connect with supporters, and receive direct funding from your community.
           </p>
           <div className="flex gap-3 mt-10 justify-center flex-wrap">
-            <Link href="/login" className="btn-primary" style={{ padding: '0.8rem 2rem', fontSize: '1rem' }}>
+            <Link href="/login" className="btn-primary" style={{ padding: '0.8rem 2rem', fontSize: '0.95rem' }}>
               Create Your Page <ArrowRight size={18} />
             </Link>
-            <Link href="/about" className="btn-ghost" style={{ padding: '0.8rem 2rem', fontSize: '1rem' }}>
+            <Link href="/about" className="btn-ghost" style={{ padding: '0.8rem 2rem', fontSize: '0.95rem' }}>
               Learn More
             </Link>
           </div>

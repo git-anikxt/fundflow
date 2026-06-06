@@ -108,7 +108,7 @@ const Navbar = () => {
                   }}
                 >
                   <div className="avatar w-7 h-7" style={{fontSize:'0.75rem',fontWeight:700}}>
-                    {session?.user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                    {session?.user?.name ? session.user.name.split(' ').slice(0, 2).map(n => n.charAt(0)).join('').toUpperCase() : 'U'}
                   </div>
                   <span className="hidden md:block" style={{color:'var(--color-text)',fontWeight:500,fontSize:'0.875rem'}}>
                     {session?.user?.name}

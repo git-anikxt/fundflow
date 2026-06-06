@@ -8,7 +8,7 @@ export default function About() {
         <div className="container-custom">
           <div className="max-w-3xl">
             <div className="badge mb-6">About FundFlow</div>
-            <h1 className="text-5xl font-extrabold tracking-tight leading-tight">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight leading-tight">
               Built for creators,
               <span className="gradient-text block">by creators.</span>
             </h1>
@@ -36,7 +36,7 @@ export default function About() {
                 { icon: <Heart size={20} />, title: "Community First", desc: "Direct connections between creators and supporters." },
                 { icon: <Zap size={20} />, title: "Instant Payouts", desc: "Funds go directly to your Razorpay account." },
                 { icon: <Shield size={20} />, title: "Secure", desc: "Bank-grade security on every transaction." },
-                { icon: <Users size={20} />, title: "Growing Fast", desc: "500+ creators and 10,000+ supporters." },
+                { icon: <Users size={20} />, title: "Easy Setup", desc: "Create your page and start receiving support in minutes." },
               ].map((v) => (
                 <div key={v.title} className="glass-card p-5">
                   <div className="avatar w-9 h-9 text-sm mb-3">{v.icon}</div>
@@ -52,7 +52,7 @@ export default function About() {
       <section style={{background:'var(--color-surface)',borderTop:'1px solid var(--color-border)',borderBottom:'1px solid var(--color-border)'}} className="py-20">
         <div className="container-custom text-center">
           <h2 className="text-3xl font-bold mb-4">Ready to start?</h2>
-          <p style={{color:'var(--color-text-muted)'}} className="mb-8">Join hundreds of creators already getting funded.</p>
+          <p style={{color:'var(--color-text-muted)'}} className="mb-8">Build your creator page and start receiving direct support from your community.</p>
           <Link href="/login" className="btn-primary" style={{padding:'0.8rem 2rem',fontSize:'1rem'}}>
             Get Started <ArrowRight size={16} />
           </Link>

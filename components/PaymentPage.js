@@ -7,7 +7,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { Bounce } from 'react-toastify'
 import { useRouter } from 'next/navigation'
-import { Trophy, Heart, MessageSquare, DollarSign } from 'lucide-react'
+import { Trophy, Heart, MessageSquare, DollarSign, Share2 } from 'lucide-react'
 
 const PaymentPage = ({ username }) => {
   const [paymentform, setPaymentform] = useState({ name: '', message: '', amount: '', email: '' })
@@ -94,7 +94,7 @@ const PaymentPage = ({ username }) => {
 
       {/* Profile info */}
       <div style={{ textAlign: 'center', marginBottom: '2.5rem', padding: '0 1rem' }}>
-        <h1 style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--color-text)', letterSpacing: '-0.02em' }}>@{username}</h1>
+        <h1 style={{ fontSize: 'clamp(1.25rem, 4vw, 1.6rem)', fontWeight: 800, color: 'var(--color-text)', letterSpacing: '-0.02em' }}>@{username}</h1>
         <p style={{ color: 'var(--color-text-muted)', marginTop: '0.4rem', maxWidth: '480px', marginInline: 'auto', fontSize: '0.95rem' }}>
           {currentUser.bio || `Help ${username} keep creating!`}
         </p>
@@ -107,6 +107,46 @@ const PaymentPage = ({ username }) => {
             <b style={{ color: 'var(--color-text)' }}>₹{totalRaised.toLocaleString()}</b> raised
           </span>
         </div>
+
+        {/* Share Button */}
+        <button
+          onClick={() => {
+            if (typeof window !== 'undefined' && navigator.share) {
+              navigator.share({
+                title: `Support ${username}`,
+                text: `Help ${username} keep creating on FundFlow!`,
+                url: window.location.href,
+              }).catch(() => {})
+            } else {
+              const url = typeof window !== 'undefined' ? window.location.href : ''
+              navigator.clipboard.writeText(url)
+              toast('Link copied to clipboard! 📋', {
+                position: 'top-right', autoClose: 3000, hideProgressBar: false,
+                closeOnClick: true, pauseOnHover: true, draggable: true,
+                theme: 'dark', transition: Bounce, type: 'success'
+              })
+            }
+          }}
+          style={{
+            marginTop: '1rem',
+            padding: '0.5rem 1rem',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--color-border)',
+            background: 'rgba(255,255,255,0.04)',
+            color: 'var(--color-text-muted)',
+            fontSize: '0.85rem',
+            fontWeight: 500,
+            cursor: 'pointer',
+            display: 'inline-flex',
+            alignItems: 'center',
+            gap: '0.4rem',
+            transition: 'all 0.18s'
+          }}
+          onMouseEnter={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.08)'; e.currentTarget.style.color = 'var(--color-text)' }}
+          onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.04)'; e.currentTarget.style.color = 'var(--color-text-muted)' }}
+        >
+          <Share2 size={14} /> Share
+        </button>
 
         {/* Progress */}
         <div style={{ maxWidth: '480px', marginInline: 'auto', marginTop: '1.25rem' }}>
@@ -123,7 +163,7 @@ const PaymentPage = ({ username }) => {
 
       {/* Main content */}
       <div className="container-custom" style={{ maxWidth: '960px', paddingBottom: '5rem' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }} className="payment-grid">
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))', gap: '1.5rem' }} className="payment-grid">
 
           {/* Top Supporters */}
           <div className="glass-card p-6">
@@ -136,10 +176,11 @@ const PaymentPage = ({ username }) => {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               {payments.length === 0 && (
-                <div style={{ textAlign: 'center', padding: '2.5rem 1rem', color: 'var(--color-text-faint)' }}>
-                  <Heart size={32} style={{ margin: '0 auto 0.75rem', opacity: 0.4 }} />
-                  <div style={{ fontSize: '0.9rem' }}>No supporters yet.</div>
-                  <div style={{ fontSize: '0.8rem', marginTop: '0.25rem' }}>Be the first one! 🚀</div>
+                <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--color-text-faint)', borderRadius: 'var(--radius-lg)', border: '1px dashed var(--color-border)', background: 'rgba(255,255,255,0.02)' }}>
+                  <Heart size={40} style={{ margin: '0 auto 1rem', opacity: 0.3 }} />
+                  <div style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--color-text)', marginBottom: '0.5rem' }}>No supporters yet</div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--color-text-muted)', marginBottom: '1rem', lineHeight: '1.5' }}>Be the first to support this amazing creator! Your contribution makes a real difference. 🚀</div>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--color-text-faint)' }}>Supporters will appear here as they contribute</div>
                 </div>
               )}
               {payments.sort((a, b) => b.amount - a.amount).slice(0, 10).map((p, i) => (
@@ -178,19 +219,22 @@ const PaymentPage = ({ username }) => {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div>
-                <label className="form-label">Your Name</label>
+                <label className="form-label" style={{display:'flex',justifyContent:'space-between'}}>Your Name <span style={{fontSize:'0.75rem',color:'var(--color-text-faint)'}}>{paymentform.name?.length || 0}/50</span></label>
                 <input onChange={handleChange} value={paymentform.name} name='name' type='text'
-                  className='input-field' placeholder='Enter your name' />
+                  className='input-field' placeholder='Enter your name' maxLength='50' />
+                {paymentform.name?.length > 0 && paymentform.name?.length < 3 && <div className="form-help" style={{color:'#f59e0b'}}>Minimum 3 characters required</div>}
               </div>
               <div>
-                <label className="form-label">Message</label>
+                <label className="form-label" style={{display:'flex',justifyContent:'space-between'}}>Message <span style={{fontSize:'0.75rem',color:'var(--color-text-faint)'}}>{paymentform.message?.length || 0}/200</span></label>
                 <input onChange={handleChange} value={paymentform.message} name='message' type='text'
-                  className='input-field' placeholder='Say something nice...' />
+                  className='input-field' placeholder='Say something nice...' maxLength='200' />
+                {paymentform.message?.length > 0 && paymentform.message?.length < 4 && <div className="form-help" style={{color:'#f59e0b'}}>Minimum 4 characters required</div>}
               </div>
               <div>
                 <label className="form-label">Email</label>
                 <input onChange={handleChange} value={paymentform.email} name='email' type='email'
                   className='input-field' placeholder='Enter your email' />
+                {paymentform.email?.length > 0 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(paymentform.email) && <div className="form-help" style={{color:'#f59e0b'}}>Enter a valid email address</div>}
               </div>
               <div>
                 <label className="form-label">Amount (₹)</label>
@@ -225,7 +269,11 @@ const PaymentPage = ({ username }) => {
                     key={q.label}
                     onClick={() => {
                       if (!paymentform.name || !paymentform.message) {
-                        alert("Please enter your name and message first")
+                        toast('Please fill in your name and message first', {
+                          position: 'top-right', autoClose: 3000, hideProgressBar: false,
+                          closeOnClick: true, pauseOnHover: true, draggable: true,
+                          theme: 'dark', transition: Bounce, type: 'info'
+                        })
                         return
                       }
 
