@@ -3,6 +3,7 @@ import React, { useEffect } from "react"
 import { useSession, signIn } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
 const Login = () => {
   const { data: session } = useSession()
   const router = useRouter()
@@ -111,15 +112,23 @@ const Login = () => {
         </div>
 
         <p
-          style={{
-            color: "var(--color-text-faint)",
-            fontSize: "0.8rem",
-            textAlign: "center",
-            marginTop: "1.5rem",
-          }}
-        >
-          By signing in, you agree to our Terms of Service and Privacy Policy.
-        </p>
+  style={{
+    color: "var(--color-text-faint)",
+    fontSize: "0.8rem",
+    textAlign: "center",
+    marginTop: "1.5rem",
+  }}
+>
+  By signing in, you agree to our{" "}
+  <Link href="/terms" className="hover:text-indigo-300 underline">
+    Terms of Service
+  </Link>{" "}
+  and{" "}
+  <Link href="/privacy" className="hover:text-indigo-300 underline">
+    Privacy Policy
+  </Link>
+  .
+</p>
 
       </div>
     </div>
