@@ -62,7 +62,7 @@ const Navbar = () => {
 
           {/* Desktop nav */}
           <div className="hidden md:flex items-center gap-1">
-            {[['/', 'Home'], ['/about', 'About'], ['/dashboard', 'Dashboard']].map(([href, label]) => (
+            {[['/', 'Home'], ['/about', 'About'], ['/dashboard', 'Dashboard'],['/creators', 'Creators']].map(([href, label]) => (
               <Link
                 key={href}
                 href={href}

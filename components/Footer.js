@@ -65,8 +65,8 @@ const Footer = () => {
         </div>
 
         <div style={{ borderTop: '1px solid var(--color-border)', marginTop: '3rem', paddingTop: '1.5rem', display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', alignItems: 'center', gap: '0.75rem' }}>
-          <span style={{ color: 'var(--color-text-faint)', fontSize: '0.8rem' }}>© {currentYear} FundFlow. All rights reserved.</span>
-          <span style={{ color: 'var(--color-text-faint)', fontSize: '0.8rem' }}>Made with ☕ for creators.</span>
+          <span style={{ color: 'var(--color-text-faint)', fontSize: '0.8rem' }}>© {currentYear} FundFlow.</span>
+          <span style={{ color: 'var(--color-text-faint)', fontSize: '0.8rem' }}>Empowering creators, developers & innovators.</span>
         </div>
       </div>
     </footer>
